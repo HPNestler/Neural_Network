@@ -148,29 +148,33 @@ def net_learn(ms, fp, ind, pr, net_mol, net):
         # print("Adjust")
         #net[x][y][i][0] = a
         a = net[x][y][i][0]
-        for j in range(-ma, ma):
-            for k in range(-ma,ma):
-                x1 = (x+j+1 % ms)-1
-                if x1 < 0:
-                    x1 = x1 + ms
-                if x1 == ms:
-                    x1 = 0
-                y1 = (y+k+1 % ms)-1
-                if y1 < 0:
-                    y1 = y1 + ms
-                if y1 == ms:
-                    y1 = 0
+        s = net[x][y][i][1]
+        if s == 0:
+            s = 1
+        for j in range(-ma, ma+1):
+            for k in range(-ma,ma+1):
+                if j != 0 or k != 0:
+                    x1 = ((x+j+1) % ms)-1
+                    if x1 < 0:
+                        x1 = x1 + ms
+                    if x1 == ms:
+                        x1 = 0
+                    y1 = ((y+k+1) % ms)-1
+                    if y1 < 0:
+                        y1 = y1 + ms
+                    if y1 == ms:
+                        y1 = 0
                 # print(x, j, x1, y, k, y1)
                 
-                s = net[j][k][i][1]
-                if s == 0:
-                    s = .5
+                #s = net[x][y][i][1]
+                #if s == 0:
+                    #s = .5
                 # d = a/(2*math.pi*pow(s,2)) * (math.exp(-(pow(j,2)))+math.exp(-(pow(k,2))))/(2*pow(s,2))
-                d = 1/4 * (math.exp(-(pow(j,2)))+math.exp(-(pow(k,2))))/(2*pow(s,2))
-                da = d*a
+                    d = (math.exp(-(pow(j,2)))+math.exp(-(pow(k,2))))/(2*pow(s,2))
+                    da = d*a
                 
-                if j != 0 or k != 0:
-                    #print(x, j, x1, y, k, y1, a, d)
+                
+                    #print('Learner : ',i, x, j, x1, ((x+j+1) % ms)-1, y, k, y1, a, d, s)
                     indn = (x1, y1)
                     ln = len(net_mol[indn])
                     if ln == 0:
